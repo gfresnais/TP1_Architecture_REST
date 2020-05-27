@@ -32,4 +32,4 @@ build/
 
 
 ### PID ###
-*.pid*
+*.attach_pid*
