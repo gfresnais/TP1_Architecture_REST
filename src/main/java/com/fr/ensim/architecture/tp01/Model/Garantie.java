@@ -1,5 +1,8 @@
 package com.fr.ensim.architecture.tp01.Model;
 
+/**
+ * Modèle pour une garantie
+ */
 public class Garantie {
     private int id;
     private String nom;
@@ -45,5 +48,15 @@ public class Garantie {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Garantie{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", montant=" + montant +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
