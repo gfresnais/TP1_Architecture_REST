@@ -10,6 +10,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public enum BDD {
     INSTANCE;
-    public static final Map<Integer, Garantie> bdd  = new HashMap<>();
+    public static final Map<Integer, Garantie> bdd  = new HashMap<Integer, Garantie>();
     public static final AtomicInteger seq = new AtomicInteger();
 }

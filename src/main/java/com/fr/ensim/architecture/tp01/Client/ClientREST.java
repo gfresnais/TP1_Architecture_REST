@@ -1,9 +1,8 @@
 package com.fr.ensim.architecture.tp01.Client;
 
 import com.fr.ensim.architecture.tp01.Model.Garantie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Collection;
 
 /**
  * Client REST (main)
@@ -15,7 +14,8 @@ public class ClientREST {
         RestTemplate restTemplate = new RestTemplate();
 
         // Get all garanties
-        Garantie[] garanties = restTemplate.getForObject(url, Garantie[].class);
+        ResponseEntity<Garantie[]> responseEntity = restTemplate.getForEntity(url, Garantie[].class);
+        Garantie[] garanties = responseEntity.getBody();
 
         if( garanties != null ) {
             for (Garantie g:
@@ -25,11 +25,14 @@ public class ClientREST {
         }
 
         // Create a new Garantie object
-        Garantie garantie = restTemplate.postForObject(url + "?nom={nom}&montant={montant}&description={description}",
-                                                    null, Garantie.class,
+        Integer id = restTemplate.postForObject(url + "?nom={nom}&montant={montant}&description={description}",
+                                                    null, Integer.class,
                                                 "Garantie 42",
                                                             42,
                                                             "La garantie 42");
+
+        // Get garantie
+        Garantie garantie = restTemplate.getForObject(url + "/{id}", Garantie.class, id);
 
         if( garantie != null ) {
             System.out.println(garantie);
@@ -42,14 +45,11 @@ public class ClientREST {
             restTemplate.put(url + "/{id}", garantie, garantie.getId());
         }
 
-        // Get garantie
-        garantie = restTemplate.getForObject(url + "/{id}", Garantie.class, 42);
-
         if( garantie != null ) {
             System.out.println(garantie);
 
             // Delete
-            restTemplate.delete(url + "/{id}", garantie, garantie.getId());
+            restTemplate.delete(url + "/{id}", garantie.getId());
         }
     }
 }

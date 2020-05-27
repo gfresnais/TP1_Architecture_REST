@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
-@RestController("/api/garantie")
+@RestController()
 public class GarantieRestController {
 
     /**
@@ -17,12 +17,13 @@ public class GarantieRestController {
      * @param description
      * @return id de la garantie créé
      */
-    @PostMapping()
-    public ResponseEntity<Garantie> addGarantie(@RequestParam("nom") String nom,
+    @PostMapping("/api/garantie")
+    public ResponseEntity<Integer> addGarantie(@RequestParam("nom") String nom,
                                                 @RequestParam("montant") int montant,
                                                 @RequestParam("description") String description)
     {
         Garantie garantie = new Garantie(BDD.seq.getAndIncrement(), nom, montant, description);
+        BDD.bdd.put(garantie.getId(), garantie);
 
         System.out.println("Garantie créée.");
 
@@ -33,11 +34,10 @@ public class GarantieRestController {
      * Requete GET qui récupère toutes les garantie de la base de donnée
      * @return Collection de toute les garanties de la base de donnée
      */
-    @GetMapping()
-    public ResponseEntity<Garantie[]> getAll(){
+    @GetMapping("/api/garantie")
+    public ResponseEntity<Collection<Garantie>> getAll(){
         System.out.println("Toutes les garanties récupérées.");
-        Garantie[] garanties = (Garantie[]) BDD.bdd.values().toArray();
-        return ResponseEntity.ok().body(garanties);
+        return ResponseEntity.ok().body(BDD.bdd.values());
     }
 
     /**
@@ -45,7 +45,7 @@ public class GarantieRestController {
      * @param id
      * @return un objet Garantie
      */
-    @GetMapping("/{id}")
+    @GetMapping("/api/garantie/{id}")
     public ResponseEntity<Garantie> getGarantie(@PathVariable("id") int id){
         if (BDD.bdd.containsKey(id)){
             Garantie garantie = BDD.bdd.get(id);
@@ -64,7 +64,7 @@ public class GarantieRestController {
      * @param garantie
      * @return un objet Garantie
      */
-    @PutMapping("/{id}")
+    @PutMapping("/api/garantie/{id}")
     public ResponseEntity<Garantie> updateGarantie(@PathVariable("id") int id, @RequestBody Garantie garantie){
         if (BDD.bdd.containsKey(id)){
             BDD.bdd.put(id, garantie);
@@ -81,7 +81,7 @@ public class GarantieRestController {
      * Requete DELETE qui supprime de la base de donnée une garantie selon l'id donnée en paramètre
      * @param id 
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/garantie/{id}")
     public ResponseEntity<Garantie> removeGarantie(@PathVariable("id") int id){
         if (BDD.bdd.containsKey(id)){
             BDD.bdd.remove(id);
