@@ -10,6 +10,13 @@ import java.util.Collection;
 @RestController("/api/garantie")
 public class GarantieRestController {
 
+    /**
+     * Requete POST qui créé une nouvelle garantie dans la base de donnée.
+     * @param nom
+     * @param montant
+     * @param description
+     * @return id de la garantie créé
+     */
     @PostMapping()
     public ResponseEntity<Garantie> addGarantie(@RequestParam("nom") String nom,
                                                 @RequestParam("montant") int montant,
@@ -19,9 +26,13 @@ public class GarantieRestController {
 
         System.out.println("Garantie créée.");
 
-        return ResponseEntity.ok().body(garantie);
+        return ResponseEntity.ok().body(garantie.getId());
     }
 
+    /**
+     * Requete GET qui récupère toutes les garantie de la base de donnée
+     * @return Collection de toute les garanties de la base de donnée
+     */
     @GetMapping()
     public ResponseEntity<Garantie[]> getAll(){
         System.out.println("Toutes les garanties récupérées.");
@@ -29,6 +40,11 @@ public class GarantieRestController {
         return ResponseEntity.ok().body(garanties);
     }
 
+    /**
+     * Requete GET qui recupère une garantie dans la base de donnée selon l'id donnée en paramètre
+     * @param id
+     * @return un objet Garantie
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Garantie> getGarantie(@PathVariable("id") int id){
         if (BDD.bdd.containsKey(id)){
@@ -42,6 +58,12 @@ public class GarantieRestController {
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Requete PUT qui mes à jours une garantie dans la base de donnée selon l'id avec une garantie donnés en paramètre
+     * @param id
+     * @param garantie
+     * @return un objet Garantie
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Garantie> updateGarantie(@PathVariable("id") int id, @RequestBody Garantie garantie){
         if (BDD.bdd.containsKey(id)){
@@ -54,6 +76,11 @@ public class GarantieRestController {
         return ResponseEntity.notFound().build();
     }
 
+
+    /**
+     * Requete DELETE qui supprime de la base de donnée une garantie selon l'id donnée en paramètre
+     * @param id 
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Garantie> removeGarantie(@PathVariable("id") int id){
         if (BDD.bdd.containsKey(id)){
