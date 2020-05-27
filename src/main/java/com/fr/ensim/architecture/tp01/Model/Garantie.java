@@ -6,6 +6,15 @@ public class Garantie {
     private int montant;
     private String description;
 
+    public Garantie() {}
+
+    public Garantie(int id, String nom, int montant, String description) {
+        this.id = id;
+        this.nom = nom;
+        this.montant = montant;
+        this.description = description;
+    }
+
     public int getId() {
         return id;
     }
