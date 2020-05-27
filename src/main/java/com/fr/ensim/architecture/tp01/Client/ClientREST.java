@@ -3,6 +3,8 @@ package com.fr.ensim.architecture.tp01.Client;
 import com.fr.ensim.architecture.tp01.Model.Garantie;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collection;
+
 /**
  * Client REST (main)
  */

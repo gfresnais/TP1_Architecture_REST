@@ -2,7 +2,6 @@ package com.fr.ensim.architecture.tp01.Controller;
 
 import com.fr.ensim.architecture.tp01.Model.BDD;
 import com.fr.ensim.architecture.tp01.Model.Garantie;
-import com.sun.istack.internal.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,14 +10,12 @@ import java.util.Collection;
 @RestController("/api/garantie")
 public class GarantieRestController {
 
-    BDD bdd = BDD.INSTANCE;
-
-    @PostMapping("")
+    @PostMapping()
     public ResponseEntity<Garantie> addGarantie(@RequestParam("nom") String nom,
-                                                      @RequestParam("montant") Integer montant,
-                                                      @RequestParam("description") String description)
+                                                @RequestParam("montant") int montant,
+                                                @RequestParam("description") String description)
     {
-        Garantie garantie = new Garantie(bdd.seq.getAndIncrement(), nom, montant, description);
+        Garantie garantie = new Garantie(BDD.seq.getAndIncrement(), nom, montant, description);
 
         System.out.println("Garantie créée.");
 
@@ -26,15 +23,16 @@ public class GarantieRestController {
     }
 
     @GetMapping()
-    public ResponseEntity<Collection<Garantie>> getAll(){
+    public ResponseEntity<Garantie[]> getAll(){
         System.out.println("Toutes les garanties récupérées.");
-        return ResponseEntity.ok().body(bdd.bdd.values());
+        Garantie[] garanties = (Garantie[]) BDD.bdd.values().toArray();
+        return ResponseEntity.ok().body(garanties);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Garantie> getGarantie(@PathVariable("id") @NotNull Integer id){
-        if (bdd.bdd.containsKey(id)){
-            Garantie garantie = bdd.bdd.get(id);
+    public ResponseEntity<Garantie> getGarantie(@PathVariable("id") int id){
+        if (BDD.bdd.containsKey(id)){
+            Garantie garantie = BDD.bdd.get(id);
 
             System.out.println("Garantie récupérée :");
             System.out.println(garantie);
@@ -45,9 +43,9 @@ public class GarantieRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Garantie> updateGarantie(@PathVariable("id") @NotNull Integer id, @RequestBody Garantie garantie){
-        if (bdd.bdd.containsKey(id)){
-            bdd.bdd.put(id, garantie);
+    public ResponseEntity<Garantie> updateGarantie(@PathVariable("id") int id, @RequestBody Garantie garantie){
+        if (BDD.bdd.containsKey(id)){
+            BDD.bdd.put(id, garantie);
 
             System.out.println("Garantie mise à jour");
 
@@ -57,9 +55,9 @@ public class GarantieRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity removeGarantie(@PathVariable("id") @NotNull Integer id){
-        if (bdd.bdd.containsKey(id)){
-            bdd.bdd.remove(id);
+    public ResponseEntity<Garantie> removeGarantie(@PathVariable("id") int id){
+        if (BDD.bdd.containsKey(id)){
+            BDD.bdd.remove(id);
             System.out.println("Garantie supprimée.");
             return ResponseEntity.noContent().build();
         }
